@@ -1,0 +1,1 @@
+PATH = 'model/base.cbm'
