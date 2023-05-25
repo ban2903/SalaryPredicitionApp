@@ -26,7 +26,7 @@ class SalaryPrediciton:
     def get_rosstat_mapping(self):
         city_dictionary = pd.read_csv('city_dictionary.csv')
         pathes = []
-        root = '../data/info-stat/'
+        root = 'data/info-stat/'
         self.mapping = []
         for directory in os.listdir(root):
             for file in os.listdir(root + directory):

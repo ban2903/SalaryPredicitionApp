@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from salary_prediction import SalaryPrediciton
-
+from config import FEATURES
 
 app = Flask(__name__)
 model = SalaryPrediciton()
-data = 0
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -12,12 +11,30 @@ def index():
         url = request.form['url']
         data = model.get_features(url)
         score = model.predict(data)[0][0]
-        return render_template('form.html', score=score)
+        resources = {'meta': []}
+        for c in ['real_salary_from', 'real_salary_to']+FEATURES:
+            resources['meta'].append(
+                {
+                    'label': c,
+                    'value': data[c].loc[0],
+                }
+            )
+        model.set_dataset(data)
+        return render_template('result.html', resources=resources, score=score)
     
     return render_template('form.html')
 
-def shap():
-    model.shap_plot(data)
+temp_file_path = 'scratch.pdf'
+
+@app.route('/generate', methods=['GET'])
+def generate_pdf():
+    model.shap_plot(model.dataset)
+    return 'done'
+
+@app.route('/pdf-result', methods=['GET'])
+def send_pdf():
+    # Send the file to the user's browser
+    return send_file(temp_file_path, attachment_filename='shap_plot.pdf')
 
 if __name__ == '__main__':
     app.run()
