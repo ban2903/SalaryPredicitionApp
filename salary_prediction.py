@@ -84,7 +84,7 @@ class SalaryPrediciton:
             if not (answer['salary'].get('from', None) is None):
                 features['real_salary_from'] = [answer['salary']['from']  * (1.0 if answer['salary'].get('is_gross', 1) else 0.13)]
             if not (answer['salary'].get('to', None) is None):
-                features['real_salary_from'] = [answer['salary']['to']  * (1.0 if answer['salary'].get('is_gross', 1) else 0.13)]
+                features['real_salary_to'] = [answer['salary']['to']  * (1.0 if answer['salary'].get('is_gross', 1) else 0.13)]
         features['url'] = [f'https://api.hh.ru/vacancies/{id}']
         features['billing_type'] = [answer['billing_type']['name']]
         features['schedule'] = [answer['schedule']['name']]
